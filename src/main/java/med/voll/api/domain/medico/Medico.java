@@ -1,11 +1,11 @@
-package med.voll.api.medico;
+package med.voll.api.domain.medico;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import med.voll.api.endereco.Endereco;
+import med.voll.api.domain.endereco.Endereco;
 
 @Table(name = "medicos")
 @Entity(name = "Medico")
@@ -25,6 +25,7 @@ public class Medico {
     private Especialidade especialidade;
     @Embedded //Essa anotação é usada para indicar que o campo endereco é um objeto embutido (embedded) na entidade Medico. Isso significa que os campos do objeto Endereco serão mapeados como colunas na tabela do banco de dados associada à entidade Medico. O objeto Endereco é tratado como parte da entidade Medico e não como uma entidade separada.
     private Endereco endereco;
+    private Boolean ativo;
 
     public Medico(DadosCadastroMedico dados) {
         this.nome = dados.nome();
@@ -33,6 +34,7 @@ public class Medico {
         this.crm = dados.crm();
         this.especialidade = dados.especialidade();
         this.endereco = new Endereco(dados.endereco());
+        this.ativo = true;
     }
 
     public void atualizarInformacoes(DadosAtualizacaoMedico dados) {
@@ -45,6 +47,10 @@ public class Medico {
         if(dados.endereco() != null){
             this.endereco.atualizarInformacoes(dados.endereco());
         }
+    }
+
+    public void excluir() {
+        this.ativo = false;
     }
 }
 
