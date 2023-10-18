@@ -1,6 +1,7 @@
 package med.voll.api.infra.exception;
 
 import jakarta.persistence.EntityNotFoundException;
+import med.voll.api.domain.ValidacaoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -15,6 +16,11 @@ import javax.naming.AuthenticationException;
 
 @RestControllerAdvice //essa anotação é usada para criar um componente global que lida com exceções em controladores REST e retorna respostas em formato JSON (ou XML, dependendo da configuração) de maneira consistente. Qualquer erro lançado por um controlador REST será tratado por esse componente, se a exceção estiver mapeada aqui.
 public class TratadorDeErros {
+
+    @ExceptionHandler(ValidacaoException.class)
+    public ResponseEntity tratarErroRegraDeNegocio(ValidacaoException ex) {
+        return ResponseEntity.badRequest().body("Erro: " + ex.getMessage());
+    }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity tratarErro404() {
